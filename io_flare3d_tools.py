@@ -10,7 +10,7 @@ bl_info = {
 	'tracker_url': 'http://davidejones.com',
 	'category': 'Import-Export'}
 
-import bpy, zlib, time
+import bpy, zlib, time, struct, zipfile
 from bpy.props import *
 
 #==================================
@@ -54,8 +54,17 @@ class ZF3DImporter(bpy.types.Operator):
 
 def ZF3DImport(file,Config):
 	print("coming soon")
-	return {'FINISHED'}
 	
+	data = file.read()	
+	if zipfile.is_zipfile(Config.FilePath):	
+		zf = zipfile.ZipFile(Config.FilePath, 'r')
+		print(zf.namelist())
+		#print(zf.infolist())
+		mainxml = zf.read("main.xml")
+
+	file.close()
+	
+	return {'FINISHED'}
 	
 class ZF3DExporterSettings:
 	def __init__(self,filePath=""):
